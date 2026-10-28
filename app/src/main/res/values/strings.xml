@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">BelajarrrUCP1</string>
+    <string name="app_name">Student App</string>
+    <string name="app_title">Student App — Coding Exam Cheat Sheet</string>
+    <string name="welcome_text">Selamat datang di Aplikasi Latihan Ujian Coding Android!</string>
+    <string name="btn_add_student">Tambah Mahasiswa</string>
+    <string name="btn_view_students">Lihat Daftar Mahasiswa</string>
+    <string name="btn_save">Simpan Data</string>
+    <string name="btn_back">Kembali</string>
+    <string name="btn_detail">Detail</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="form_title">Formulir Input Mahasiswa</string>
+    <string name="list_title">Daftar Mahasiswa Terdaftar</string>
+    <string name="detail_title">Detail Data Mahasiswa</string>
+    <string name="empty_list">Belum ada data mahasiswa.</string>
 </resources>
