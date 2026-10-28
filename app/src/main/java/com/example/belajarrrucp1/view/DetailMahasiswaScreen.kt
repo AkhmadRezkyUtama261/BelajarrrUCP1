@@ -32,9 +32,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.belajarrrucp1.R
+import com.example.belajarrrucp1.ui.theme.BelajarrrUCP1Theme
 import com.example.belajarrrucp1.viewmodel.MahasiswaViewModel
 
 /**
@@ -235,5 +237,17 @@ fun DetailMahasiswaScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun DetailMahasiswaScreenPreview() {
+    BelajarrrUCP1Theme {
+        DetailMahasiswaScreen(
+            nim = "20220140261",
+            viewModel = MahasiswaViewModel(),
+            onNavigateBack = {}
+        )
     }
 }

@@ -24,15 +24,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.belajarrrucp1.R
 import com.example.belajarrrucp1.model.Mahasiswa
+import com.example.belajarrrucp1.ui.theme.BelajarrrUCP1Theme
 
 /**
  * 1. KODE INI DIGUNAKAN UNTUK APA:
  * Komponen Card kustom untuk menampilkan satu item data mahasiswa di dalam daftar (LazyColumn).
- * Didesain dengan gaya visual rapi terinspirasi dari praktikum tugas layout dan user input.
+ * Terinspirasi langsung dari CustomCard pada repositori QuestTugasLayout.
  *
  * 2. MENGAPA KODE INI DIPERLUKAN:
  * Memisahkan tampilan item ke dalam composable tersendiri membuat kode halaman daftar (List)
@@ -41,13 +43,12 @@ import com.example.belajarrrucp1.model.Mahasiswa
  * 3. BAGAIMANA KODE INI BEKERJA:
  * - Menerima objek data Mahasiswa.
  * - Menggunakan Card dengan sudut membulat (RoundedCornerShape 16.dp).
- * - Mengatur baris (Row) untuk gambar logo dan informasi mahasiswa.
- * - Menyediakan dua tombol aksi: "Detail" dan "Hapus" yang memicu callback event.
+ * - Menata Row untuk gambar logo dan teks informasi mahasiswa.
+ * - Menyediakan dua tombol aksi: "Detail" dan "Hapus".
  *
  * 4. BAGIAN YANG HARUS DIUBAH JIKA STUDI KASUS UJIAN BERBEDA:
  * - Ganti `mahasiswa: Mahasiswa` dengan data model studi kasusmu (misal: `barang: Barang`).
- * - Ganti teks yang ditampilkan (misal: `mahasiswa.nama` menjadi `barang.namaBarang`).
- * - Sesuaikan warna latar card jika ingin warna yang berbeda.
+ * - Ganti teks yang ditampilkan (misal: `barang.namaBarang`).
  */
 @Composable
 fun CustomMahasiswaCard(
@@ -72,12 +73,10 @@ fun CustomMahasiswaCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Baris atas: Logo + Informasi Mahasiswa
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Gambar Icon / Logo kampus/profil
                 Image(
                     painter = painterResource(id = R.drawable.logo_umy),
                     contentDescription = "Logo",
@@ -86,7 +85,6 @@ fun CustomMahasiswaCard(
 
                 Spacer(modifier = Modifier.width(14.dp))
 
-                // Kolom informasi teks: Nama, NIM, dan Program Studi
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.Center
@@ -118,18 +116,14 @@ fun CustomMahasiswaCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Baris tombol aksi: Tombol Detail dan Tombol Hapus
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Tombol Hapus (Outlined / Putih)
                 OutlinedButton(
                     onClick = onDeleteClick,
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color.White
-                    ),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White),
                     border = ButtonDefaults.outlinedButtonBorder.copy(
                         brush = androidx.compose.ui.graphics.SolidColor(Color.White)
                     ),
@@ -140,7 +134,6 @@ fun CustomMahasiswaCard(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Tombol Detail (Solid White Button dengan teks warna card)
                 Button(
                     onClick = onDetailClick,
                     colors = ButtonDefaults.buttonColors(
@@ -153,5 +146,22 @@ fun CustomMahasiswaCard(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomMahasiswaCardPreview() {
+    BelajarrrUCP1Theme {
+        CustomMahasiswaCard(
+            mahasiswa = Mahasiswa(
+                nim = "20220140261",
+                nama = "Akhmad Rezky Utama",
+                prodi = "Teknologi Informasi",
+                semester = "5"
+            ),
+            onDetailClick = {},
+            onDeleteClick = {}
+        )
     }
 }
