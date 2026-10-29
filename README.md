@@ -1,6 +1,6 @@
 # Student App — Android Coding Exam Cheat Sheet 📱🎓
 
-Selamat datang di repositori **Student App — Android Coding Exam Cheat Sheet**! Proyek ini dirancang khusus sebagai referensi belajar dan lembar contekan (*cheat sheet*) pemrograman Android berbasis **Jetpack Compose** untuk persiapan ujian praktik mata kuliah Pengembangan Aplikasi Mobile (PAM / UCP).
+Selamat datang di repositori **Student App — Android Coding Exam Cheat Sheet**! Proyek ini dirancang khusus sebagai referensi belajar, template kerja, dan lembar contekan (*cheat sheet*) pemrograman Android berbasis **Jetpack Compose** untuk persiapan ujian praktik mata kuliah Pengembangan Aplikasi Mobile (PAM / UCP).
 
 Proyek ini menggabungkan materi esensial dari 4 praktikum/tugas:
 1. **Navigasi & MVVM** (`QuestNavigasiMVVM_0261`): Penggunaan `NavHost`, `composable`, rute berparameter, dan `ViewModel`.
@@ -12,12 +12,12 @@ Proyek ini menggabungkan materi esensial dari 4 praktikum/tugas:
 
 ## 📂 Peta File dan Arsitektur Proyek
 
-Struktur folder dibuat modular, bersih, dan memisahkan tanggung jawab (MVVM sederhana):
+Struktur folder dibuat modular, bersih, dan memisahkan tanggung jawab sesuai pola arsitektur **MVVM (Model-View-ViewModel)**:
 
 ```
 com.example.belajarrrucp1/
 │
-├── MainActivity.kt                      # Titik masuk utama aplikasi (Activity)
+├── MainActivity.kt                      # Titik masuk utama aplikasi (Activity) & pemanggil NavHost
 │
 ├── model/
 │   └── Mahasiswa.kt                     # Data Class (Model) penyimpan atribut mahasiswa
@@ -52,12 +52,11 @@ com.example.belajarrrucp1/
 2. **Sync Gradle**:
    - Tunggu proses Gradle Sync selesai secara otomatis. Jika tidak otomatis, klik tombol **Sync Project with Gradle Files** (ikon gajah berputar di pojok kanan atas).
 3. **Pastikan Emulator / Device Terhubung**:
-   - Pilih AVD (Android Virtual Device) atau sambungkan ponsel fisik dengan USB Debugging aktif.
+   - Pilih AVD (Android Virtual Device, misal: *Pixel 9 API 37*) atau sambungkan ponsel fisik dengan USB Debugging aktif.
 4. **Jalankan Aplikasi**:
-   - Klik tombol **Run** (segitiga hijau) atau tekan shortcut `Shift + F10`.
-5. **Pemeriksaan Error**:
-   - Jika terdapat error build, periksa tab **Build** di jendela bawah Android Studio.
-   - Pastikan JDK yang digunakan adalah Java 11 atau Java 17 (**Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK**).
+   - Klik tombol **Run** (segitiga hijau ▶️) atau tekan shortcut `Shift + F10`.
+5. **Mode Preview (Tanpa Emulator)**:
+   - Buka file screen manapun di folder `view/`, lalu klik tombol **Split** atau **Design** di pojok kanan atas editor kode untuk melihat tampilan visual secara instan.
 
 ---
 
@@ -89,10 +88,10 @@ com.example.belajarrrucp1/
 
 ## 🛠️ Panduan Cepat Modifikasi Saat Ujian (Ubah Studi Kasus)
 
-Jika saat ujian kamu mendapatkan studi kasus yang berbeda (misal: **Data Barang / Produk / Buku**), ikuti langkah sederhana ini:
+Jika saat ujian kamu mendapatkan studi kasus yang berbeda (misal: **Data Barang / Produk / Buku / Rental Mobil**), ikuti 4 langkah sederhana ini:
 
 ### 1. Ubah Data Class (`model/`)
-Ganti nama class dan atributnya:
+Ganti nama class dan atributnya sesuai soal:
 ```kotlin
 // Contoh: Dari Mahasiswa menjadi Produk
 data class Produk(
@@ -136,21 +135,20 @@ OutlinedTextField(
 ```
 
 ### 4. Sesuaikan Tampilan Card & Detail
-Tampilkan data baru:
+Tampilkan atribut data baru:
 ```kotlin
 Text(text = produk.namaProduk, fontWeight = FontWeight.Bold)
 Text(text = "Harga: Rp${produk.harga}")
 ```
 
-Alur **Navigasi**, **LazyColumn**, **Scaffold**, dan **State Management** tetap persis sama!
+> **📌 Catatan:** Seluruh alur **Navigasi**, **LazyColumn**, **Scaffold**, dan **StateFlow** tetap persis sama tanpa perlu diubah arsitekturnya!
 
 ---
 
-## 💡 Contoh Cuplikan Kode Kunci
+## 💡 Cuplikan Kode Kunci yang Sering Dipakai
 
-### 1. State Input Form & Validasi
+### 1. State Input Form & Validasi Sederhana
 ```kotlin
-// Menyimpan isi teks input
 var namaInput by remember { mutableStateOf("") }
 var errorPesan by remember { mutableStateOf<String?>(null) }
 
@@ -158,25 +156,25 @@ OutlinedTextField(
     value = namaInput,
     onValueChange = { 
         namaInput = it 
-        errorPesan = null // Reset error saat mengetik
+        errorPesan = null // Reset pesan error saat user mengetik kembali
     },
-    label = { Text("Nama") }
+    label = { Text("Nama Lengkap") }
 )
 
 Button(onClick = {
     if (namaInput.isBlank()) {
         errorPesan = "Nama tidak boleh kosong!"
     } else {
-        // Lakukan simpan ke ViewModel
+        // Panggil fungsi simpan ke ViewModel
     }
 }) {
     Text("Simpan")
 }
 ```
 
-### 2. Navigasi Berargumen
+### 2. Navigasi Berargumen Dinamis (Kirim ID / NIM)
 ```kotlin
-// NavHost route
+// 1. Mendaftarkan rute berargumen di NavHost:
 composable(
     route = "detail/{id}",
     arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -185,6 +183,38 @@ composable(
     DetailScreen(id = id, onBack = { navController.popBackStack() })
 }
 
-// Cara memanggil navigasi dari layar lain:
+// 2. Cara memanggil rute dari halaman list/card:
 navController.navigate("detail/${item.id}")
 ```
+
+### 3. LazyColumn (List Scrollable dengan Card)
+```kotlin
+LazyColumn(modifier = Modifier.fillMaxSize()) {
+    itemsIndexed(items = listData, key = { _, item -> item.id }) { index, data ->
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = data.nama, fontWeight = FontWeight.Bold)
+                Button(onClick = { navController.navigate("detail/${data.id}") }) {
+                    Text("Lihat Detail")
+                }
+            }
+        }
+    }
+}
+```
+
+---
+
+## 🚨 Troubleshooting Error Umum Saat Ujian
+
+1. **Error: `Unresolved reference 'icons'`**
+   - **Penyebab:** Dependency Material Icons Extended belum terpasang.
+   - **Solusi:** Jangan pakai `Icons.Default.Add`. Cukup pakai teks simbol bawaan Compose seperti `Text("+", fontSize = 28.sp, color = Color.White)` di dalam FloatingActionButton.
+2. **Error: `Aar Dependency compatibility issues / compileSdk`**
+   - **Penyebab:** Dependency terbaru butuh SDK compile yang lebih tinggi.
+   - **Solusi:** Di `app/build.gradle.kts`, ubah `compileSdk = 37`, lalu klik **Sync Now**.
+3. **Error: Composable Preview Merah / Tidak Muncul**
+   - **Solusi:** Klik tulisan biru **Build & Refresh... (Ctrl+Shift+F5)** di panel preview setelah melakukan sync gradle yang sukses.
